@@ -2,7 +2,7 @@
 name = "pysoils"
 version = "0.1.0"
 description = "Download and store soil data; compute from soil data soil water dynamics"
-authors = ["mcmancini <m.c.mancini@exeter.ac.uk>"]
+authors = ["mcmancini <m.c.mancini@exeter.ac.uk>", "chenm <m.chen2@exeter.ac.uk>"]
 readme = "README.md"
 
 [tool.poetry.dependencies]
