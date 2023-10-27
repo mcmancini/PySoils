@@ -28,20 +28,65 @@ from soilgrids import SoilGrids
 import xarray as xr
 from pyproj import Transformer
 import numpy as np
-#import os
+import kwargs
+# import os
 # import multiprocessing as mp
 
+# create Constants class
+class Constants:
+    '''Pass all constants as class attributes.'''
+
+    def __init__(self):
+        '''Initialize Constants object.'''
+        self.soil_vars = ['bdod', 'cec', 'cfvo', 'clay',
+                          'nitrogen', 'phh2o', 'sand', 'silt', 'soc', 'ocd', 'ocs']
+        self.soil_depth = ['0-5', '5-15',
+                           '15-30', '30-60', '60-100', '100-200']
 
 # create SoilApp class
 class SoilApp:
-
     '''Create a SoilApp object.'''
+    @staticmethod
+    def mult_hundred(x: float):
+        '''Multiply by 100.'''
+        return x*100
+
+    @staticmethod
+    def mult_ten(x: float):
+        '''Multiply by 10.'''
+        return x*10
+
+    @staticmethod
+    def div_ten(x: float):
+        '''Divide by 10.'''
+        return x/10
+
+    @staticmethod
+    def div_hundred(x: float):
+        '''Divide by 100.'''
+        return x/100
+
+    @staticmethod
+    def NoConversion(x: float):
+        '''No conversion.'''
+        return x
 
     def __init__(self):
         '''Initialize SoilApp object.'''
 
-        # prepare for parallel processing
-        # cpu_number = mp.cpu_count()
+        self._obs_conversions = {
+            "bdod": self.mult_hundred,
+            "cec": self.div_ten,
+            "cfvo": self.div_ten,
+            "clay": self.div_ten,
+            "nitrogen": self.div_hundred,
+            "phh2o": self.div_ten,
+            "sand": self.div_ten,
+            "silt": self.div_ten,
+            "soc": self.div_ten,
+            "ocd": self.div_ten,
+            "ocs": self.mult_ten
+        }
 
     def on_demand_download(self, geo_type: str, geo_code0: float, geo_code1: float):
         '''On-demand download SoilGrids data for a given geo-code.'''
@@ -70,31 +115,8 @@ class SoilApp:
         # get soil data
         soil_grids = SoilGrids()
 
-        # Conversion functions
-        def NoConversion(x): return x
-        def mult_hundred(x): return x*100.
-        def mult_ten(x): return x*10.
-        def div_ten(x): return x/10.
-        def div_hundred(x): return x/100.
-
-        # Conversion by soil parameter (see https://www.isric.org/explore/soilgrids/faq-soilgrids)
-        obs_conversions = {
-            "bdod": mult_hundred,
-            "cec": div_ten,
-            "cfvo": div_ten,
-            "clay": div_ten,
-            "nitrogen": div_hundred,
-            "phh2o": div_ten,
-            "sand": div_ten,
-            "silt": div_ten,
-            "soc": div_ten,
-            "ocd": div_ten,
-            "ocs": mult_ten
-        }
-
-        soilvars = ['bdod', 'cec', 'cfvo', 'clay', 'nitrogen',
-                    'phh2o', 'sand', 'silt', 'soc', 'ocd', 'ocs']
-        soil_depths = ['0-5', '5-15', '15-30', '30-60', '60-100', '100-200']
+        soilvars = Constants().soil_vars
+        soil_depths = Constants().soil_depth
 
         counter = 1
         soil_data = xr.Dataset()
@@ -112,7 +134,7 @@ class SoilApp:
                                                                       width=4000, height=6400,
                                                                       crs='urn:ogc:def:crs:EPSG::4326', output='tmp.tif')
                         # conversion to conventional units
-                        func = obs_conversions[var]
+                        func = self._obs_conversions[var]
                         soil_data[var] = func(soil_data[var])
                     except:
                         print("get_coverage_data failed. Retrying in 60 seconds...")
@@ -128,7 +150,7 @@ class SoilApp:
                                                                              width=4000, height=6400,
                                                                              crs='urn:ogc:def:crs:EPSG::4326', output=('tmp.tif'))
                             # conversion to conventional units
-                            func = obs_conversions[var]
+                            func = self._obs_conversions[var]
                             soil_chunk[depth] = func(soil_chunk[depth])
                         except:
                             print(
@@ -166,30 +188,8 @@ class SoilApp:
         # get soil data
         soil_grids = SoilGrids()
 
-        # Conversion functions
-        def NoConversion(x): return x
-        def mult_hundred(x): return x*100.
-        def mult_ten(x): return x*10.
-        def div_ten(x): return x/10.
-        def div_hundred(x): return x/100.
-
-        # Conversion by soil parameter (see https://www.isric.org/explore/soilgrids/faq-soilgrids)
-        obs_conversions = {
-            "bdod": mult_hundred,
-            "cec": div_ten,
-            "cfvo": div_ten,
-            "clay": div_ten,
-            "nitrogen": div_hundred,
-            "phh2o": div_ten,
-            "sand": div_ten,
-            "silt": div_ten,
-            "soc": div_ten,
-            "ocd": div_ten,
-            "ocs": mult_ten}
-
-        soilvars = ['bdod', 'cec', 'cfvo', 'clay', 'nitrogen',
-                    'phh2o', 'sand', 'silt', 'soc', 'ocd', 'ocs']
-        soil_depths = ['0-5', '5-15', '15-30', '30-60', '60-100', '100-200']
+        soilvars = Constants().soil_vars
+        soil_depths = Constants().soil_depth
 
         counter = 1
         soil_data = xr.Dataset()
@@ -206,7 +206,7 @@ class SoilApp:
                                                                       width=4000, height=6400,
                                                                       crs='urn:ogc:def:crs:EPSG::4326', output=('tmp.tif'))
                         # conversion to conventional units
-                        func = obs_conversions[var]
+                        func = self._obs_conversions[var]
                         soil_data[var] = func(soil_data[var])
                     except:
                         print("get_coverage_data failed. Retrying in 60 seconds...")
@@ -223,7 +223,7 @@ class SoilApp:
                                                                              width=4000, height=6400,
                                                                              crs='urn:ogc:def:crs:EPSG::4326', output=('tmp.tif'))
                             # conversion to conventional units
-                            func = obs_conversions[var]
+                            func = self._obs_conversions[var]
                             soil_chunk[depth] = func(soil_chunk[depth])
                         except:
                             print(

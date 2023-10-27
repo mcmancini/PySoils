@@ -741,6 +741,20 @@ docs = ["myst-parser", "sphinx-autodoc-typehints", "sphinxcontrib-github-alt", "
 test = ["ipykernel", "pre-commit", "pytest", "pytest-cov", "pytest-timeout"]
 
 [[package]]
+name = "kwargs"
+version = "1.0.1"
+description = "Python micro-framework"
+optional = false
+python-versions = "*"
+files = [
+    {file = "kwargs-1.0.1-py3-none-any.whl", hash = "sha256:f553495d7dfc7b9ec335d572d93ce723cc6de4917a5d135cbc84c2d772b7139f"},
+    {file = "kwargs-1.0.1.tar.gz", hash = "sha256:2557e7b3e3c9317fb64079c06664a5f1ce9be342e04ee295375d91eef63a5e31"},
+]
+
+[package.extras]
+test = ["pylint", "pytest", "pytest-cov"]
+
+[[package]]
 name = "lxml"
 version = "4.9.3"
 description = "Powerful and Pythonic XML processing library combining libxml2/libxslt with the ElementTree API."
@@ -1973,4 +1987,4 @@ testing = ["big-O", "jaraco.functools", "jaraco.itertools", "more-itertools", "p
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.9"
-content-hash = "125a1efffca462936b6392ce9849f81456067127be146495352f1f9444aa0b13"
+content-hash = "e6449a832826575dc5568d3741f876d9c29d10d60d22c2d131d51a5f6e851ee0"

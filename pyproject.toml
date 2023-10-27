@@ -9,6 +9,7 @@ readme = "README.md"
 python = "^3.9"
 soilgrids = "^0.1.4"
 pyproj = "^3.6.1"
+kwargs = "^1.0.1"
 
 [tool.poetry.group.dev.dependencies]
 pylint = "^3.0.1"
