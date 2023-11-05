@@ -29,6 +29,7 @@ import xarray as xr
 from pyproj import Transformer
 import numpy as np
 import kwargs
+import math
 # import os
 # import multiprocessing as mp
 
@@ -70,6 +71,32 @@ class SoilApp:
     def NoConversion(x: float):
         '''No conversion.'''
         return x
+    
+    @staticmethod
+    def move_point(latitude, longitude, distance, bearing):
+        '''Move a point by a given distance and bearing in degrees'''
+
+        earth_radius = 6371000  # Earth's radius in meters
+        angular_distance = distance / earth_radius
+        # in degrees, 0 is north, 90 is east, 180 is south, 270 is west
+        bearing = math.radians(bearing)
+        lat1 = math.radians(latitude)
+        lon1 = math.radians(longitude)
+        lat2 = math.asin(math.sin(lat1) * math.cos(angular_distance) +
+                        math.cos(lat1) * math.sin(angular_distance) * math.cos(bearing))
+        lon2 = lon1 + math.atan2(math.sin(bearing) * math.sin(angular_distance) * math.cos(lat1),
+                                math.cos(angular_distance) - math.sin(lat1) * math.sin(lat2))
+        new_latitude = math.degrees(lat2)
+        new_longitude = math.degrees(lon2)
+        return new_latitude, new_longitude
+    
+    @staticmethod
+    def get_bounding_box(latitude, longitude, distance):
+        '''Get the bounding box of a point given a distance in meters'''
+
+        lat1, lon1 = SoilApp.move_point(latitude, longitude, distance, 225)
+        lat2, lon2 = SoilApp.move_point(latitude, longitude, distance, 45)
+        return lat1, lon1, lat2, lon2
 
     def __init__(self):
         '''Initialize SoilApp object.'''
@@ -88,9 +115,10 @@ class SoilApp:
             "ocs": self.mult_ten
         }
 
-    def on_demand_download(self, geo_type: str, geo_code0: float, geo_code1: float):
+    def on_demand_download(self, centre_lat: float, centre_lon: float, radius: float):
         '''On-demand download SoilGrids data for a given geo-code.'''
 
+        '''
         if geo_type == 'CRS':
             west, east, south, north = geo_code0 - 0.5e6, geo_code0 + \
                 0.5e6, geo_code1 - 0.8e6, geo_code1 + 0.8e6
@@ -111,6 +139,7 @@ class SoilApp:
         else:
             print('Invalid geo_type. Please enter a valid geo_type("CRS" or "lat-lon").')
             return
+        '''
 
         # get soil data
         soil_grids = SoilGrids()
@@ -121,6 +150,8 @@ class SoilApp:
         counter = 1
         soil_data = xr.Dataset()
 
+        bb = SoilApp.get_bounding_box(centre_lat, centre_lon, radius)
+
         for var in soilvars:
             print(
                 f'Processing variable {counter} of {len(soilvars)}: \'{var}\'')
@@ -130,7 +161,7 @@ class SoilApp:
                     depth = '0-30'
                     try:
                         soil_data[var] = soil_grids.get_coverage_data(service_id=var, coverage_id=f'{var}_{depth}cm_mean',
-                                                                      west=bl[0], south=bl[1], east=br[0], north=tr[1],
+                                                                      west=bb[0], south=bb[1], east=bb[2], north=bb[3],
                                                                       width=4000, height=6400,
                                                                       crs='urn:ogc:def:crs:EPSG::4326', output='tmp.tif')
                         # conversion to conventional units
@@ -146,7 +177,7 @@ class SoilApp:
                     while True:
                         try:
                             soil_chunk[depth] = soil_grids.get_coverage_data(service_id=var, coverage_id=f'{var}_{depth}cm_mean',
-                                                                             west=bl[0], south=bl[1], east=br[0], north=tr[1],
+                                                                             west=bb[0], south=bb[1], east=bb[3], north=bb[4],
                                                                              width=4000, height=6400,
                                                                              crs='urn:ogc:def:crs:EPSG::4326', output=('tmp.tif'))
                             # conversion to conventional units
