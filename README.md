@@ -16,14 +16,18 @@ The idea here is to have two functionalities implemented:
 
 **Mingyuan Chen**: Land, Environment, Economics and Policy Institute (LEEP), University of Exeter, Exeter EX4 4PU, United Kingdom. Email: <M.Chen2@exeter.ac.uk>
 
-This work is licnesed under.
+This work is licensed under.
 
 ## Table of contents
 
-- [Package installation](#package-installation)
-- [Usage](#usage)
-- [Test](#test)
-- [References](#references)
+- [README: SoilGrids dataset downloader](#readme-soilgrids-dataset-downloader)
+  - [Introduction](#introduction)
+  - [Authors, affiliation and licence](#authors-affiliation-and-licence)
+  - [Table of contents](#table-of-contents)
+  - [Package installation](#package-installation)
+  - [Usage](#usage)
+  - [Test](#test)
+  - [References](#references)
 
 ## Package installation
 
