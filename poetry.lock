@@ -279,6 +279,7 @@ files = [
     {file = "cftime-1.6.3-cp39-cp39-macosx_11_0_arm64.whl", hash = "sha256:523b9a6bf03f5e36407979e248381d0fcab2d225b915bbde77d00c6dde192b90"},
     {file = "cftime-1.6.3-cp39-cp39-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:8a14d2c7d22fd2a6dfa6ad563283b6d6679f1df95e0ed8d14b8f284dad402887"},
     {file = "cftime-1.6.3-cp39-cp39-win_amd64.whl", hash = "sha256:d9b00c2844c7a1701d8ede5336b6321dfee256ceab81a34a1aff0483d56891a6"},
+    {file = "cftime-1.6.3.tar.gz", hash = "sha256:d0a6b29f72a13f08e008b9becff247cc75c84acb213332ede18879c5b6aa4dfd"},
 ]
 
 [package.dependencies]
@@ -1054,13 +1055,13 @@ files = [
 
 [[package]]
 name = "owslib"
-version = "0.29.2"
+version = "0.29.3"
 description = "OGC Web Service utility library"
 optional = false
 python-versions = ">=3.6"
 files = [
-    {file = "OWSLib-0.29.2-py2.py3-none-any.whl", hash = "sha256:07a597f3d0029ee41eb159dcf784672ce6b3968b61bb39ad93ca9b29a4f4a2b7"},
-    {file = "OWSLib-0.29.2.tar.gz", hash = "sha256:6c03924747e802466c7b4f5873ed555f16aa51806c9be85dc84af95bbe75466c"},
+    {file = "OWSLib-0.29.3-py2.py3-none-any.whl", hash = "sha256:69d0175463a9dcf49d68599d7b88309a42c79196d8a9e134b6607c056b42a50e"},
+    {file = "OWSLib-0.29.3.tar.gz", hash = "sha256:3baf34058458b933767ee43e632174cb0baebf49d326da179faacb9772f98539"},
 ]
 
 [package.dependencies]
@@ -1987,4 +1988,4 @@ testing = ["big-O", "jaraco.functools", "jaraco.itertools", "more-itertools", "p
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.9"
-content-hash = "e6449a832826575dc5568d3741f876d9c29d10d60d22c2d131d51a5f6e851ee0"
+content-hash = "a98e98696bcd5280c36bbd97bb4bb3a395a047a7f41693f700c25875ae370c82"

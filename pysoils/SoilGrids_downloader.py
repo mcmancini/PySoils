@@ -30,6 +30,7 @@ from pyproj import Transformer
 import numpy as np
 import kwargs
 import math
+from owslib.wcs import WebCoverageService
 # import os
 # import multiprocessing as mp
 
@@ -156,6 +157,7 @@ class SoilApp:
             print(
                 f'Processing variable {counter} of {len(soilvars)}: \'{var}\'')
             soil_chunk = xr.Dataset()
+            wcs = WebCoverageService(f'https://maps.isric.org/mapserv?map=/{var}.map', version='2.0.1')
             if var == 'ocs':
                 while True:  # required because the server sometimes returns a 500 error
                     depth = '0-30'
