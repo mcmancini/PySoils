@@ -1,0 +1,5 @@
+.vscode/
+Data/
+bulk_SoilGrids_downloader.py
+tests/*.tif
+tests/*.nc

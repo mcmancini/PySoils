@@ -7,10 +7,15 @@ readme = "README.md"
 
 [tool.poetry.dependencies]
 python = "^3.9"
+soilgrids = "^0.1.4"
+pyproj = "^3.6.1"
+kwargs = "^1.0.1"
+owslib = "^0.29.3"
 
 [tool.poetry.group.dev.dependencies]
 pylint = "^3.0.1"
 black = "^23.10.0"
+ipykernel = "^6.26.0"
 
 [build-system]
 requires = ["poetry-core"]
